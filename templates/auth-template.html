@@ -378,16 +378,34 @@
             if (form) {
                 validateForm(form.id);
             }
+            
+            // Add validation for password confirmation
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirm-password');
+            
+            if (passwordInput && confirmPasswordInput) {
+                confirmPasswordInput.addEventListener('input', function() {
+                    if (this.value && this.value !== passwordInput.value) {
+                        this.setCustomValidity('Passwords do not match');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                });
+                
+                passwordInput.addEventListener('input', function() {
+                    if (confirmPasswordInput.value && confirmPasswordInput.value !== this.value) {
+                        confirmPasswordInput.setCustomValidity('Passwords do not match');
+                    } else {
+                        confirmPasswordInput.setCustomValidity('');
+                    }
+                });
+            }
         });
     </script>
     
     <!-- Custom scripts for individual templates -->
-    <!-- Custom scripts for individual templates -->
-
-
-
-    <!-- <script> -->
+    <script>
         {% block custom_scripts %}{% endblock %}
-    <!-- </script> -->
+    </script>
 </body>
 </html>
