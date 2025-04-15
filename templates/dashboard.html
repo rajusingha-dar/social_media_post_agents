@@ -1,0 +1,32 @@
+<!-- templates/dashboard.html -->
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Welcome, {{ user.username }}!</h2>
+    
+    <div class="dashboard-card">
+        <h3>Create New Post</h3>
+        <p>Generate engaging social media content for multiple platforms using our advanced AI.</p>
+        <button class="btn-primary" onclick="window.location.href='/create-post'">Create Post</button>
+    </div>
+    
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h4>Posts Created</h4>
+            <p class="stat-number">0</p>
+            <p class="stat-detail">Start creating to see your stats</p>
+        </div>
+        <div class="stat-card">
+            <h4>Supported Platforms</h4>
+            <p class="stat-number">4</p>
+            <p class="stat-detail">Facebook, LinkedIn, Twitter, Reddit</p>
+        </div>
+        <div class="stat-card">
+            <h4>AI Models</h4>
+            <p class="stat-number">3</p>
+            <p class="stat-detail">Standard, Professional, Creative</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

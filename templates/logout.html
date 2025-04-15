@@ -1,0 +1,29 @@
+<!-- templates/logout.html -->
+{% extends "auth-template.html" %}
+
+{% block page_title %}Logout{% endblock %}
+
+{% block auth_content %}
+    <div class="form-header">
+        <h2>Sign Out</h2>
+        <p>Are you sure you want to sign out?</p>
+    </div>
+
+    {% if success %}
+    <div class="success-message">
+        You have been successfully logged out.
+    </div>
+    {% endif %}
+
+    <form id="logout-form" method="POST" action="/logout">
+        <button type="submit" class="form-button">Sign Out</button>
+    </form>
+
+    <div class="form-links" style="margin-top: 2rem;">
+        <a href="/" style="display: block; text-align: center;">Cancel and return to dashboard</a>
+    </div>
+{% endblock %}
+
+{% block bottom_link %}
+&copy; 2025 AI Social Poster | <a href="/">Go to Home</a>
+{% endblock %}
