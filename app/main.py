@@ -13,6 +13,36 @@ from .auth import get_current_active_user, get_current_user
 from .routes import auth_routes
 from .config import settings
 
+
+
+
+# app/main.py
+import logging
+from fastapi import FastAPI, Depends, Request, HTTPException, status
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+# Import database components first
+from .database import get_db, initialize_db
+
+# Import models to ensure they're registered with SQLAlchemy
+from .models.chat import Conversation, Message
+from .models.post import SocialMediaPost, PlatformType
+
+# Import auth components
+from .auth import get_current_active_user, get_current_user
+
+# Import route modules
+from .routes import auth_routes
+
+from .database import Base, engine
+from .models import *  # This will import all models from __init__.py
+
+# Your existing main.py code follows...
+
 # Configure root logger
 logging.basicConfig(
     level=getattr(logging, settings.LOG_LEVEL),
@@ -224,3 +254,24 @@ async def general_exception_handler(request: Request, exc: Exception):
         logger.error(f"Error rendering error template: {str(e)}")
         content = "<html><body><h1>500 - Server Error</h1><p>An unexpected error occurred. Please try again later.</p></body></html>"
         return HTMLResponse(content=content, status_code=500)
+    
+
+
+# app/main.py (update to include new routes)
+from .routes import chatbot_routes
+
+# Existing code...
+
+# Include chatbot routers
+app.include_router(chatbot_routes.router)
+logger.info("Chatbot routes registered")
+
+# Redirect authenticated users to chatbot
+@app.get("/dashboard")
+async def dashboard(request: Request, current_user=Depends(get_current_active_user)):
+    """Dashboard - redirects to chatbot for authenticated users"""
+    return RedirectResponse(url="/chatbot", status_code=status.HTTP_303_SEE_OTHER)
+
+
+from app.routes import chatbot_routes
+app.include_router(chatbot_routes.router)

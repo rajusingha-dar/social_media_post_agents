@@ -12,3 +12,7 @@ pymysql
 mysql-connector-python
 pydantic-settings
 bcrypt
+openai
+aiohttp
+langchain-community 
+tavily-python

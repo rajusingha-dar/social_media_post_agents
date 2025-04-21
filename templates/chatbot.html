@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="chatbot-container">
+    <div class="chatbot-sidebar">
+        <h3>Conversations</h3>
+        <button id="new-conversation-btn" class="btn-primary">New Conversation</button>
+        <div id="conversation-list" class="conversation-list"></div>
+    </div>
+    
+    <div class="chatbot-main">
+        <div class="chatbot-header">
+            <h2>AI Social Media Post Generator</h2>
+        </div>
+        
+        <div id="chat-messages" class="chat-messages">
+            <div class="welcome-message">
+                <h3>Welcome, {{ user.username }}!</h3>
+                <p>How can I help you generate a social media post today?</p>
+            </div>
+        </div>
+
+        <div class="platform-selector">
+            <div class="platform-option">
+                <input type="checkbox" id="platform-linkedin" name="platforms" value="linkedin" checked>
+                <label for="platform-linkedin">LinkedIn</label>
+            </div>
+            <div class="platform-option">
+                <input type="checkbox" id="platform-twitter" name="platforms" value="twitter" checked>
+                <label for="platform-twitter">Twitter</label>
+            </div>
+            <div class="platform-option">
+                <input type="checkbox" id="platform-reddit" name="platforms" value="reddit" checked>
+                <label for="platform-reddit">Reddit</label>
+            </div>
+        </div>
+        
+        <div class="chat-input-container">
+            <textarea id="chat-input" placeholder="Describe what kind of social media post you'd like to create..."></textarea>
+            <button id="send-btn" class="btn-primary">Generate</button>
+        </div>
+    </div>
+    
+    <div class="post-preview-container" id="post-preview-container" style="display: none;">
+        <div class="post-preview-header">
+            <h3>Generated Posts</h3>
+            <button class="close-preview-btn">&times;</button>
+        </div>
+        
+        <div class="post-tabs">
+            <button class="post-tab active" data-platform="linkedin">LinkedIn</button>
+            <button class="post-tab" data-platform="twitter">Twitter</button>
+            <button class="post-tab" data-platform="reddit">Reddit</button>
+        </div>
+        
+        <div class="post-content-container">
+            <div class="post-content active" id="linkedin-content">
+                <div class="platform-preview linkedin-preview">
+                    <div class="preview-header">
+                        <div class="preview-profile"></div>
+                        <div class="preview-name">{{ user.username }}</div>
+                    </div>
+                    <div class="preview-body" id="linkedin-body"></div>
+                </div>
+                <div class="post-actions">
+                    <button class="btn-secondary copy-btn" data-platform="linkedin">Copy</button>
+                </div>
+            </div>
+
+            <div class="post-content" id="twitter-content">
+                <div class="platform-preview twitter-preview">
+                    <div class="preview-header">
+                        <div class="preview-profile"></div>
+                        <div class="preview-name">@{{ user.username }}</div>
+                    </div>
+                    <div class="preview-body" id="twitter-body"></div>
+                </div>
+                <div class="post-actions">
+                    <button class="btn-secondary copy-btn" data-platform="twitter">Copy</button>
+                </div>
+            </div>
+
+            <div class="post-content" id="reddit-content">
+                <div class="platform-preview reddit-preview">
+                    <div class="preview-header">
+                        <div class="preview-profile"></div>
+                        <div class="preview-name">u/{{ user.username }}</div>
+                    </div>
+                    <div class="preview-body" id="reddit-body"></div>
+                </div>
+                <div class="post-actions">
+                    <button class="btn-secondary copy-btn" data-platform="reddit">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='js/chatbot.js') }}"></script>
+{% endblock %}

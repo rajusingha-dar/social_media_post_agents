@@ -9,7 +9,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from pydantic import EmailStr
 
-from ..database import get_db, User
+
+from ..database import get_db
+from ..models.user import User
+
 from ..auth import (
     authenticate_user, create_access_token, 
     get_current_active_user, create_user,
@@ -159,7 +162,8 @@ async def login_form(
             data={"sub": user.username}, expires_delta=access_token_expires
         )
         
-        response = RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
+        # Changed the redirect URL from "/" to "/chatbot"
+        response = RedirectResponse(url="/chatbot", status_code=status.HTTP_303_SEE_OTHER)
         response.set_cookie(
             key="access_token", 
             value=f"Bearer {access_token}", 

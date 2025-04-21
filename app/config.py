@@ -26,6 +26,8 @@ class Settings(BaseSettings):
         DB_USER: Database username
         DB_PASSWORD: Database password
         OPENAI_API_KEY: Optional OpenAI API key
+        LLM_MODEL: The name of the language model to use
+        TAVILY_API_KEY: Optional Tavily API key for search functionality
         TWITTER_API_KEY: Optional Twitter API key
         TWITTER_API_SECRET: Optional Twitter API secret
         FACEBOOK_ACCESS_TOKEN: Optional Facebook access token
@@ -47,6 +49,12 @@ class Settings(BaseSettings):
     
     # OpenAI settings
     OPENAI_API_KEY: Optional[str] = None
+    LLM_MODEL: str = "gpt-4"  # Default model, can be overridden via environment variable
+
+    # Search settings
+    SEARCH_API_KEY: Optional[str] = None
+    SEARCH_API_URL: str = "https://api.search.example.com/v1/search"  # Default URL
+    TAVILY_API_KEY: Optional[str] = None  # Added for Tavily search integration
     
     # Social media API keys
     TWITTER_API_KEY: Optional[str] = None

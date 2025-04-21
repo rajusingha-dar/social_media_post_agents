@@ -4,13 +4,14 @@ from datetime import datetime, timedelta
 from typing import Optional, Union, Dict, Any
 from passlib.context import CryptContext
 from jose import JWTError, jwt
-from fastapi import Depends, HTTPException, status, Cookie
+from fastapi import Depends, HTTPException, status, Cookie, Request
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr, validator
 
-from .database import User, get_db, pwd_context
 from .config import settings
+from .database import get_db, pwd_context
+from .models.user import User
 
 # Configure module logger
 logger = logging.getLogger(__name__)
@@ -118,8 +119,43 @@ def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta]
             detail="Error creating access token"
         )
 
+# def get_user_from_token(db: Session, token: str) -> Optional[User]:
+#     """Get user from token without raising exceptions."""
+#     try:
+#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+#         username = payload.get("sub")
+#         if username is None:
+#             return None
+#         return User.get_by_username(db, username)
+#     except Exception as e:
+#         logger.error(f"Error decoding token: {str(e)}")
+#         return None
+
+def get_user_from_token(db: Session, token: str) -> Optional[User]:
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if username is None:
+            return None
+        return User.get_by_username(db, username)
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).error(f"Error decoding token: {str(e)}")
+        return None
+
+# def get_token_from_cookie(access_token: Optional[str] = Cookie(None)) -> Optional[str]:
+#     """Extract token from cookie."""
+#     if access_token and access_token.startswith("Bearer "):
+#         return access_token.replace("Bearer ", "")
+#     return None
 def get_token_from_cookie(access_token: Optional[str] = Cookie(None)) -> Optional[str]:
-    """Extract token from cookie."""
+    if access_token and access_token.startswith("Bearer "):
+        return access_token.replace("Bearer ", "")
+    return None
+
+def get_token_from_request(request: Request) -> Optional[str]:
+    """Extract token from request cookies."""
+    access_token = request.cookies.get("access_token")
     if access_token and access_token.startswith("Bearer "):
         return access_token.replace("Bearer ", "")
     return None
